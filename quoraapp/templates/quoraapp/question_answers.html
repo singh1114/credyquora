@@ -1,0 +1,12 @@
+{% block title %}Question Answers{% endblock %}
+
+
+{% block content %}
+<br>
+<h3>Question: </h3>{{ question.question }} <br>
+{% for answer in answers %}
+
+<h3>Answer: </h3>{{ answer.answer }} <br>
+<br><br>
+{% endfor %}
+{% endblock %}

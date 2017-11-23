@@ -1,0 +1,12 @@
+{% block title %}My Questions{% endblock %}
+
+{% block content %}
+<br>
+{% if questions %}
+	{% for question in questions%}
+	{{ question.question }} <br>
+	{% endfor %}
+{% else %}
+	<h1>There are no questions Yet!</h1>
+{% endif %}
+{% endblock %}

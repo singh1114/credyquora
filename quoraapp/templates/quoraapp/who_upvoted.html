@@ -1,0 +1,18 @@
+{% block title %}Who upvoted{% endblock %}
+
+
+{% block content %}
+<br>
+{% if context_obj %}
+	<h3>Question: </h3>{{ context_obj.question }}
+	{% for context in context_obj.ansup %}
+		<h3>Answer: </h3>{{ context.answer }} <br>
+		{% for upvote_user in context.upvote_user %}
+			<h3>Upvotes: </h3>{{ upvote_user.username }} <br>
+		{% endfor %}
+	<br><br>
+	{% endfor %}
+{% else %}
+	<h1>There are no upvote Yet!</h1>
+{% endif %}
+{% endblock %}

@@ -10,17 +10,26 @@ class Question(models.Model):
         User,
         on_delete=models.CASCADE
     )
-   	Question = models.CharField(
-   		max_length=2000,
+   	question = models.CharField(
+   		max_length=20000,
 	)
 
 class Answer(models.Model):
-	answertext = models.CharField(
-        max_length=2000,
-    )
-	upvotes = models.BooleanField()
+	
+	user = models.ForeignKey(
+		User,
+		on_delete=models.CASCADE
+	)
+	question = models.ForeignKey(
+		Question,
+		on_delete=models.CASCADE,
+	)
+	answer = models.CharField(
+		max_length=20000,
+	)
 
-class AnswerUser(models.Model):
+
+class Upvote(models.Model):
 	user = models.ForeignKey(
 		User,
 		on_delete=models.CASCADE
@@ -29,5 +38,4 @@ class AnswerUser(models.Model):
 		Answer,
 		on_delete=models.CASCADE
 	)
-
-
+	upvote = models.BooleanField()

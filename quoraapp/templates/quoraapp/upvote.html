@@ -1,0 +1,11 @@
+{% block title %}Upvote{% endblock %}
+
+{% block content %}
+<br>
+{{ answer.answer }}
+<form action="" method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Upvote</button>
+</form>
+{% endblock %}

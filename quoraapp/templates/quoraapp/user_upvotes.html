@@ -1,0 +1,15 @@
+{% block title %}My Upvotes{% endblock %}
+
+
+{% block content %}
+<br>
+{% if context_obj %}
+	{% for context in context_obj %}
+	<h3>Answer: </h3>{{ context.answer }} <br>
+	<h3>Upvotes: </h3>{{ context.upvote }} <br>
+	<br><br>
+	{% endfor %}
+{% else %}
+	<h1>There are no upvote Yet!</h1>
+{% endif %}
+{% endblock %}
