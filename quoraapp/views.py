@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from datetime import datetime, timedelta
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
+from django.utils import timezone
 from django.views import View
 from django.views.generic.edit import FormView
 
@@ -83,11 +86,12 @@ class UpvoteView(LoginRequiredMixin, FormView):
 
         if form.is_valid():
             upvote = request.POST['upvote']
+            date = timezone.now()
             if(upvote == 'on'):
                 upvote = True
             else:
                 upvote = False
-            upvote_obj = Upvote(user=user, answer=answer, upvote=upvote)
+            upvote_obj = Upvote(user=user, answer=answer, upvote=upvote, date=date)
             upvote_obj.save()
 
         return HttpResponse("The third view is at its place")
@@ -179,6 +183,33 @@ class WhoUpvotedView(LoginRequiredMixin, View):
         return render(request, 'quoraapp/who_upvoted.html', context={
             'context_obj': context_obj
         })
+
+
+class HoursHighestVotesView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        questions = Question.objects.all()
+        last_hour_date_time = datetime.now() - timedelta(hours = 1)
+        now_time = datetime.now()
+        highest_question_pk = None
+        max_upvotes = 0
+        for question in questions:
+            total_upvotes = 0
+            answers = Answer.objects.filter(question=question)
+            for answer in answers:
+                upvotes = Upvote.objects.filter(answer=answer, date__gte=last_hour_date_time, date__lt=now_time)
+                total_upvotes += len(upvotes)
+            if(total_upvotes > max_upvotes):
+                max_upvotes = total_upvotes
+                highest_question_pk = question.pk
+
+                question = Question.objects.get(pk=highest_question_pk).question
+
+        return render(request, 'quoraapp/hourshighestvotes.html', context={
+            'max_votes': max_upvotes,
+            'question': question
+        })
+
 
 class EverHighestVotesView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
