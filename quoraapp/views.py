@@ -17,9 +17,7 @@ from quoraapp.forms import UpvoteForm
 from quoraapp.models import Question
 from quoraapp.models import Answer
 from quoraapp.models import Upvote
-# Create your views here.
-class IndexView(View):
-    pass
+# Create your views here
 
 class QuestionView(LoginRequiredMixin, FormView):
     template_name = 'quoraapp/question.html'
@@ -34,7 +32,7 @@ class QuestionView(LoginRequiredMixin, FormView):
             question_obj = Question(user=user, question=question)
             question_obj.save()
 
-        return HttpResponse("The first view is at its place")
+        return HttpResponse("Done")
 
 
 class AnswerView(LoginRequiredMixin, FormView):
@@ -62,7 +60,7 @@ class AnswerView(LoginRequiredMixin, FormView):
             answer_obj = Answer(user=user, question=question, answer=answer)
             answer_obj.save()
 
-        return HttpResponse("The second view is at its place")
+        return HttpResponse("Done")
 
 
 class UpvoteView(LoginRequiredMixin, FormView):
@@ -86,15 +84,19 @@ class UpvoteView(LoginRequiredMixin, FormView):
 
         if form.is_valid():
             upvote = request.POST['upvote']
-            date = timezone.now()
-            if(upvote == 'on'):
-                upvote = True
+            if(answer.user != user):
+                print answer.user
+                print user
+                date = timezone.now()
+                if(upvote == 'on'):
+                    upvote = True
+                else:
+                    upvote = False
+                upvote_obj = Upvote(user=user, answer=answer, upvote=upvote, date=date)
+                upvote_obj.save()
+                return HttpResponse("Done")
             else:
-                upvote = False
-            upvote_obj = Upvote(user=user, answer=answer, upvote=upvote, date=date)
-            upvote_obj.save()
-
-        return HttpResponse("The third view is at its place")
+                return HttpResponse("You can't upvote your own answer")
 
 
 class UserQuestionsView(LoginRequiredMixin, View):

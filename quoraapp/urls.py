@@ -1,5 +1,4 @@
 from django.conf.urls import url, include
-from quoraapp.views import IndexView
 from quoraapp.views import QuestionView
 from quoraapp.views import AnswerView
 from quoraapp.views import UpvoteView
@@ -22,5 +21,4 @@ urlpatterns = [
 	url(r'^whoupvoted/(?P<pk>\d+)$', WhoUpvotedView.as_view(), name='whoupvoted'),
 	url(r'^hourshighestvotes/?', HoursHighestVotesView.as_view(), name='hourshighestvotes'),
 	url(r'^everhighestvotes/?', EverHighestVotesView.as_view(), name='everhighestvotes'),
-    url(r'^index/?', IndexView.as_view(), name='index'),
  ]
